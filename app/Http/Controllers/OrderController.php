@@ -4,31 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 
+use Illuminate\Http\Request;
+
 class OrderController extends Controller
 {
     public function index()
     {
-        $cart = session()->get('cart', []);
-        return view('order.index', compact('cart'));
+        $orders = Order::where('user_id', auth()->id())->latest()->get();
+        return view('order.index', compact('orders'));
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $cart = session()->get('cart', []);
+        $cart = session('cart', []);
         if (empty($cart)) {
-            return back()->with('error', 'Your cart is empty.');
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+        $total = collect($cart)->reduce(function ($sum, $item) {
+            return $sum + ($item['price'] * $item['quantity']);
+        }, 0);
 
         Order::create([
             'user_id' => auth()->id(),
-            'items' => json_encode($cart),
+            'items' => $cart,
             'total' => $total,
+            'status' => 'pending',
         ]);
 
         session()->forget('cart');
 
-        return redirect('/')->with('success', 'Order placed successfully!');
+        return redirect()->route('order.index')->with('success', 'Order placed successfully!');
     }
 }

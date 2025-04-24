@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderFactory> */
+    protected $fillable = ['user_id', 'items', 'total', 'status'];
+
+    protected $casts = [
+        'items' => 'array', // This will convert the string to an array when fetching from the database
+    ];
+
     use HasFactory;
 }

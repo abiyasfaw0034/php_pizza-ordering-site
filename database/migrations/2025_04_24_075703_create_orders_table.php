@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to the user
+        $table->json('items');           // Store pizzas with qty, name, price, etc.
+        $table->decimal('total', 8, 2);  // Store the total price
+        $table->string('status')->default('pending'); // Optional: pending, confirmed, delivered
+        $table->timestamps();
         });
     }
 
