@@ -18,18 +18,35 @@
             @else
                 <ul class="divide-y divide-gray-200">
                     @foreach($cart as $id => $item)
-                        <li class="py-3 flex justify-between">
-                            <div>
-                                <p class="font-semibold">{{ $item['name'] }}</p>
-                                <p class="text-sm text-gray-500">
-                                    ${{ number_format($item['price'], 2) }} x {{ $item['quantity'] }}
-                                </p>
-                            </div>
-                            <p class="text-sm font-semibold">
-                                ${{ number_format($item['price'] * $item['quantity'], 2) }}
-                            </p>
-                        </li>
-                    @endforeach
+    <li class="py-3 flex justify-between items-center">
+        <div>
+            <p class="font-semibold">{{ $item['name'] }}</p>
+            <p class="text-sm text-gray-500">
+                ${{ number_format($item['price'], 2) }} x {{ $item['quantity'] }}
+            </p>
+        </div>
+
+        <div class="flex gap-2 items-center">
+            <form method="POST" action="{{ route('cart.decrease', $id) }}">
+                @csrf @method('PATCH')
+                <button class="bg-gray-200 px-2">-</button>
+            </form>
+
+            <span class="px-2">{{ $item['quantity'] }}</span>
+
+            <form method="POST" action="{{ route('cart.increase', $id) }}">
+                @csrf @method('PATCH')
+                <button class="bg-gray-200 px-2">+</button>
+            </form>
+
+            <form method="POST" action="{{ route('cart.remove', $id) }}">
+                @csrf @method('DELETE')
+                <button class="bg-red-400 text-white px-2">Cancel</button>
+            </form>
+        </div>
+    </li>
+@endforeach
+
                 </ul>
 
                 <div class="text-right mt-4 font-bold text-lg">

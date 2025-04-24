@@ -30,6 +30,10 @@ Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::delete('/cart/{pizzaId}', [CartController::class, 'destroy'])->name('cart.remove');
 
+    Route::patch('/cart/increase/{pizzaId}', [CartController::class, 'increase'])->name('cart.increase');
+Route::patch('/cart/decrease/{pizzaId}', [CartController::class, 'decrease'])->name('cart.decrease');
+Route::delete('/cart/{pizzaId}', [CartController::class, 'destroy'])->name('cart.remove');
+
     // Order Routes (Placeholder for future functionality)
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');

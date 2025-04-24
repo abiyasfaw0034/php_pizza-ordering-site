@@ -14,6 +14,12 @@
             @else
                 <ul class="divide-y divide-stone-500 px-2">
                     @foreach($pizzas as $pizza)
+    @php
+        $cart = session('cart', []);
+        $inCart = isset($cart[$pizza['id']]);
+        $quantity = $inCart ? $cart[$pizza['id']]['quantity'] : 0;
+    @endphp
+
     <li class="flex gap-4 py-2">
         <img 
             src="{{ $pizza['imageUrl'] }}" 
@@ -35,16 +41,40 @@
                 @endif
 
                 @if(!$pizza['soldOut'])
-                    <form action="{{ route('cart.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $pizza['id'] }}">
-                        <input type="hidden" name="name" value="{{ $pizza['name'] }}">
-                        <input type="hidden" name="price" value="{{ $pizza['unitPrice'] }}">
-                        <button type="submit"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-sm">
-                            Add to cart
-                        </button>
-                    </form>
+                    @if(!$inCart)
+                        <form action="{{ route('cart.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $pizza['id'] }}">
+                            <input type="hidden" name="name" value="{{ $pizza['name'] }}">
+                            <input type="hidden" name="price" value="{{ $pizza['unitPrice'] }}">
+                            <button type="submit"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-sm">
+                                Add to cart
+                            </button>
+                        </form>
+                    @else
+                        <div class="flex gap-1 items-center">
+                            <form method="POST" action="{{ route('cart.decrease', $pizza['id']) }}">
+                                @csrf
+                                @method('PATCH')
+                                <button class="bg-gray-300 px-2 rounded">-</button>
+                            </form>
+
+                            <span class="px-2">{{ $quantity }}</span>
+
+                            <form method="POST" action="{{ route('cart.increase', $pizza['id']) }}">
+                                @csrf
+                                @method('PATCH')
+                                <button class="bg-gray-300 px-2 rounded">+</button>
+                            </form>
+
+                            <form method="POST" action="{{ route('cart.remove', $pizza['id']) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="bg-red-500 text-white px-2 rounded">Cancel</button>
+                            </form>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
