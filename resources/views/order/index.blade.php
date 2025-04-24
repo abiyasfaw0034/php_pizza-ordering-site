@@ -7,7 +7,6 @@
 
     <div class="py-6 max-w-4xl mx-auto space-y-6">
         @foreach($orders as $order)
-            <!-- Remove the dd() after debugging -->
             <div class="bg-white shadow rounded p-4">
                 <h3 class="font-bold">Order #{{ $order->id }}</h3>
                 <p>Status: <span class="capitalize">{{ $order->status }}</span></p>
@@ -19,6 +18,16 @@
                     @endforeach
                 </ul>
                 <p class="text-xs text-gray-500 mt-2">Placed at: {{ $order->created_at->format('F j, Y g:i A') }}</p>
+
+                @if($order->status === 'pending')
+                    <form action="{{ route('order.cancel', $order->id) }}" method="POST" class="mt-4">
+                        @csrf
+                        @method('POST')
+                        <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+                            Cancel Order
+                        </button>
+                    </form>
+                @endif
             </div>
         @endforeach
     </div>

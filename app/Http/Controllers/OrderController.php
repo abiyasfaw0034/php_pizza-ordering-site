@@ -36,4 +36,18 @@ class OrderController extends Controller
 
         return redirect()->route('order.index')->with('success', 'Order placed successfully!');
     }
+    public function cancel($id)
+{
+    $order = Order::where('user_id', auth()->id())->findOrFail($id);
+
+    // Only allow canceling if the order is still pending
+    if ($order->status === 'pending') {
+        $order->status = 'cancelled';
+        $order->save();
+        return redirect()->route('order.index')->with('success', 'Order cancelled successfully!');
+    }
+
+    return redirect()->route('order.index')->with('error', 'You cannot cancel this order.');
+}
+
 }

@@ -37,6 +37,8 @@ Route::delete('/cart/{pizzaId}', [CartController::class, 'destroy'])->name('cart
     // Order Routes (Placeholder for future functionality)
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::post('/order/cancel/{order}', [OrderController::class, 'cancel'])->name('order.cancel');
+
 // });
 
 require __DIR__.'/auth.php';
