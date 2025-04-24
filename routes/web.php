@@ -38,6 +38,8 @@ Route::delete('/cart/{pizzaId}', [CartController::class, 'destroy'])->name('cart
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order/cancel/{order}', [OrderController::class, 'cancel'])->name('order.cancel');
+    
+Route::get('/cancelled-orders', [OrderController::class, 'cancelledOrders'])->name('orders.cancelled');
 
 // });
 

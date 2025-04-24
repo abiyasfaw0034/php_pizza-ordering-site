@@ -24,8 +24,13 @@
                 
                 <!-- Order Link -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('order.index')" :active="request()->routeIs('orders.*')">
+                    <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
                         {{ __('Order') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('orders.cancelled')" :active="request()->routeIs('orders.cancelled')">
+                        {{ __('Order History') }}
                     </x-nav-link>
                 </div>
             </div>
